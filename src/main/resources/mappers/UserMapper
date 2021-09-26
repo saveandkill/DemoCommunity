@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.learningcase.mapper.UserMapper" >
+    <resultMap id="BaseResultMap" type="com.example.learningcase.mapper.UserMapper" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="account_id" property="account_id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="token" property="token" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmt_create" jdbcType="BIGINT"/>
+        <result column="gmt_modified" property="gmt_modified" jdbcType="BIGINT" />
+        <result column="bio" property="bio" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, account_id, name, token, gmt_create,gmt_modified,bio
+    </sql>
+
+    <insert id="add" parameterType="com.example.learningcase.model.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            user
+            (account_id, name, token, gmt_create,gmt_modified,bio)
+        VALUES
+            (#{account_id}, #{name}, #{token}, #{gmt_create},#{gmt_modified},#{bio})
+    </insert>
+
+    <update id="update" parameterType="com.example.learningcase.model.User">
+        UPDATE
+        user
+        SET
+        <trim suffixOverrides="," suffix="WHERE id = #{id}">
+            <if test="account_id != null">account_id = #{account_id},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="token != null">token = #{token},</if>
+            <if test="gmt_create != null">gmt_create = #{gmt_create},</if>
+            <if test="gmt_modified != null">gmt_modified = #{gmt_modified},</if>
+            <if test="bio != null">bio = #{bio},</if>
+        </trim>
+    </update>
+
+    <select id="queryAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM user
+    </select>
+
+    <select id="queryOne" resultType="com.example.learningcase.model.User" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+
+
+</mapper>
